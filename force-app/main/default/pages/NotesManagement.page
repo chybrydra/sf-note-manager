@@ -1,32 +1,36 @@
 <apex:page controller="NotesManagementController">
     <apex:pageBlock>
         <apex:pageBlockSection title="Search notes">
-            <apex:form>
-                By title: <apex:inputCheckbox value="{! searchByTitle }"/><br/>
-                By keywords: <apex:inputCheckbox value="{! searchByKeyword }"/><br/>
-                Search query: <apex:inputText value="{! searchText }"/><br/>
-                <apex:commandButton action="{! search }" value="search" reRender="theTable"/>
+            <apex:form style="display: flex">
+                <div style="width: 45%">
+                    <apex:inputCheckbox value="{! searchByTitle }"/> search in titles<br/>
+                    <apex:inputCheckbox value="{! searchByKeyword }"/> search in keywords<br/>
+                </div>
+                <div style="width: 45%">
+                    Search query: <apex:inputText value="{! searchText }"/><br/>
+                    <apex:commandButton action="{! search }" value="search" reRender="theTable"/>
+                </div>                
             </apex:form>
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Notes">
             <apex:pageBlockTable value="{! notes }" var="note" id="theTable">
-                <apex:column>
-                    <apex:outputLink value="{! '/' & note.id }">
-                        {!note.Title__c}
-                    </apex:outputLink>    
+                <apex:column headerValue = "Title">
+                    <apex:outputLink value="{! '/' & note.id }">{!note.Title__c}</apex:outputLink>    
                 </apex:column>
-                <apex:column value="{!note.Keywords__c}"/>
-                <apex:column value="{!note.Effective_Date__c}"/>
-                <apex:column value="{!note.Active__c}"/>
-                <apex:column>
+                <apex:column headerValue="Keywords" value="{!note.Keywords__c}"/>
+                <apex:column headerValue="Effective date" value="{!note.Effective_Date__c}"/>
+                <apex:column headerValue="Is Active?" value="{!note.Active__c}"/>
+                <apex:column headerValue="Actions">
                     <apex:outputLink value="{! URLFOR($Action.My_Notes__c.Edit, note.Id) }">
                         Edit
                     </apex:outputLink>
                     &nbsp;
-                    <apex:outputLink value="{! URLFOR($Action.My_Notes__c.Delete, note.Id) }">
-                        Delete
-                    </apex:outputLink>
+                    <apex:form>
+                        <apex:commandLink action="{! deleteNote }" value="delete">
+                            <apex:param value="{! note.Id }" name="NoteId" />
+                        </apex:commandLink>    
+                    </apex:form>
                 </apex:column>
             </apex:pageBlockTable>
         </apex:pageBlockSection>

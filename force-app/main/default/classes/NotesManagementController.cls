@@ -1,6 +1,5 @@
 public class NotesManagementController {
 
-
     private String sortOrder = 'Effective_Date__c';
     public List<My_Notes__c> notes {get; set;}
     public String searchText {get; set;}
@@ -21,7 +20,7 @@ public class NotesManagementController {
     }
 
     public void search() {
-        String filters = generateLikeSoqlFilters();
+        String filters = generateSoqlFilters();
         String whereStmt = filters == '' ? '' : 'WHERE ' + filters + ' '; 
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
@@ -32,7 +31,7 @@ public class NotesManagementController {
         );
     }
 
-    private String generateLikeSoqlFilters() {
+    private String generateSoqlFilters() {
         Map<String, Boolean> likeFilters = new Map<String, Boolean>();
         likeFilters.put('Title__c', searchByTitle);
         likeFilters.put('Keywords__c', searchByKeyword);
@@ -46,5 +45,18 @@ public class NotesManagementController {
             }
         }
         return result;
+    }
+
+    public void deleteNote() {
+        Id noteId = ApexPages.currentpage().getParameters().get('NoteId');
+        My_Notes__c noteToDelete = [SELECT Id FROM My_Notes__c WHERE Id=:noteId LIMIT 1];
+        delete noteToDelete;
+        for (My_Notes__c note : notes) {
+            if (note.Id == noteId) {
+                notes.remove(notes.indexOf(note));
+                break;
+            }
+        }
+        // initialize();
     }
 }
