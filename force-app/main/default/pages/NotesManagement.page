@@ -10,6 +10,7 @@
                 </div>
                 <div>
                     Start date: <apex:input type="date" value="{! startDate }" /> <br/>
+                    End date: <apex:input type="date" value="{! endDate }" /> <br/>
                 </div>
                 <div>
                     Search query: <apex:inputText value="{! searchText }"/><br/>

@@ -6,6 +6,7 @@ public class NotesManagementController {
     public boolean searchByTitle {get; set;}
     public boolean searchByKeyword {get; set;}
     public Date startDate {get; set;}
+    public Date endDate {get; set;}
 
     public NotesManagementController() {
         initialize();
@@ -46,10 +47,26 @@ public class NotesManagementController {
                 result += ' OR ' + key + ' LIKE \'%' + searchText + '%\'';
             }
         }
-        result += result=='' ? '' : ' AND ';
-        String startDateString = startDate.year() + '-' + startDate.month() + '-' + startDate.day();
-        result += 'Effective_Date__c > ' + startDateString +'T00:00:00Z';
+        if (startDate != null) {
+            result += result=='' ? '' : ' AND ';
+            result += 'Effective_Date__c > ' + createDateString(startDate) +'T00:00:00Z';
+        }
+        if (endDate != null) {
+            result += result=='' ? '' : ' AND ';
+            result += 'Effective_Date__c < ' + createDateString(endDate) +'T00:00:00Z';
+        }
+        System.debug('RESULT OF QUERY CREATION: ' + result);
         return result;
+    }
+
+    public String createDateString(Date theDate) {
+        String dateString = theDate.year() + '-';
+        dateString += theDate.month() < 10 ? '0' : '';
+        dateString += String.valueOf(theDate.month());
+        dateString += '-';
+        dateString += theDate.day() < 10 ? '0' : '';
+        dateString += String.valueOf(theDate.day());
+        return dateString;
     }
 
     public void deleteNote() {
