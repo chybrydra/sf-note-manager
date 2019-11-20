@@ -5,7 +5,6 @@
                 "type": "My_Notes__c",
                 "referenceId": "My_Notes__cRef1"
             },
-            "Name": "N-000083",
             "Title__c": "Note4",
             "Description__c": "desc4",
             "Active__c": false,
@@ -17,7 +16,6 @@
                 "type": "My_Notes__c",
                 "referenceId": "My_Notes__cRef2"
             },
-            "Name": "N-000086",
             "Title__c": "Note7",
             "Description__c": "desc7",
             "Active__c": true,
@@ -29,7 +27,6 @@
                 "type": "My_Notes__c",
                 "referenceId": "My_Notes__cRef3"
             },
-            "Name": "N-000089",
             "Title__c": "Note10",
             "Description__c": "John Doe",
             "Active__c": true,
@@ -41,7 +38,6 @@
                 "type": "My_Notes__c",
                 "referenceId": "My_Notes__cRef4"
             },
-            "Name": "N-000090",
             "Title__c": "Note13",
             "Description__c": "13 friday unlucky day",
             "Active__c": true,
@@ -53,7 +49,6 @@
                 "type": "My_Notes__c",
                 "referenceId": "My_Notes__cRef5"
             },
-            "Name": "N-000088",
             "Title__c": "Note33",
             "Description__c": "Desc33",
             "Active__c": true,
@@ -65,7 +60,6 @@
                 "type": "My_Notes__c",
                 "referenceId": "My_Notes__cRef6"
             },
-            "Name": "N-000091",
             "Title__c": "Do stuff",
             "Description__c": "Do something, dunno what but do it",
             "Active__c": false,
@@ -77,7 +71,6 @@
                 "type": "My_Notes__c",
                 "referenceId": "My_Notes__cRef7"
             },
-            "Name": "N-000087",
             "Title__c": "Note1",
             "Description__c": "Desc1",
             "Active__c": true,

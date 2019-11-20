@@ -35,4 +35,5 @@
             </apex:pageBlockTable>
         </apex:pageBlockSection>
     </apex:pageBlock >
+    <apex:pageMessages/>
 </apex:page>

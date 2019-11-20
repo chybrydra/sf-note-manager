@@ -50,13 +50,20 @@ public class NotesManagementController {
     public void deleteNote() {
         Id noteId = ApexPages.currentpage().getParameters().get('NoteId');
         My_Notes__c noteToDelete = [SELECT Id FROM My_Notes__c WHERE Id=:noteId LIMIT 1];
-        delete noteToDelete;
-        for (My_Notes__c note : notes) {
-            if (note.Id == noteId) {
-                notes.remove(notes.indexOf(note));
-                break;
+        try {
+            delete noteToDelete;
+            for (My_Notes__c note : notes) {
+                if (note.Id == noteId) {
+                    Integer noteIndex = notes.indexOf(note);
+                    String message = 'Note deleted successfully: ' + notes.get(noteIndex).Title__c;
+                    ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,message));
+                    notes.remove(noteIndex);
+                    break;
+                }
             }
+        } catch (DmlException e) {
+            System.debug(e.getMessage());
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'The note could not be deleted'));            
         }
-        // initialize();
     }
 }
