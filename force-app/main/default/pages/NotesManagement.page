@@ -1,14 +1,17 @@
-<apex:page controller="NotesManagementController">
+<apex:page docType="html-5.0" controller="NotesManagementController">
     
     <apex:pageBlock>
         <apex:pageMessages/>
         <apex:pageBlockSection title="Search notes">
             <apex:form style="display: flex">
-                <div style="width: 45%">
+                <div>
                     <apex:inputCheckbox value="{! searchByTitle }"/> search in titles<br/>
                     <apex:inputCheckbox value="{! searchByKeyword }"/> search in keywords<br/>
                 </div>
-                <div style="width: 45%">
+                <div>
+                    Start date: <apex:input type="date" value="{! startDate }" /> <br/>
+                </div>
+                <div>
                     Search query: <apex:inputText value="{! searchText }"/><br/>
                     <apex:commandButton action="{! search }" value="search"/>
                 </div>                

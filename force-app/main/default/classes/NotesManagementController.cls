@@ -5,6 +5,7 @@ public class NotesManagementController {
     public String searchText {get; set;}
     public boolean searchByTitle {get; set;}
     public boolean searchByKeyword {get; set;}
+    public Date startDate {get; set;}
 
     public NotesManagementController() {
         initialize();
@@ -45,6 +46,9 @@ public class NotesManagementController {
                 result += ' OR ' + key + ' LIKE \'%' + searchText + '%\'';
             }
         }
+        result += result=='' ? '' : ' AND ';
+        String startDateString = startDate.year() + '-' + startDate.month() + '-' + startDate.day();
+        result += 'Effective_Date__c > ' + startDateString +'T00:00:00Z';
         return result;
     }
 
