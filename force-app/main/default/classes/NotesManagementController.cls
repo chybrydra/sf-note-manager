@@ -29,6 +29,7 @@ public class NotesManagementController {
             'ORDER BY ' + sortOrder + ' ASC ' +
             'LIMIT 20'
         );
+        ApexPages.getMessages().clear();
     }
 
     private String generateSoqlFilters() {
