@@ -1,0 +1,12 @@
+<apex:page standardController="My_Notes__c" recordSetVar="notes">
+    <apex:pageBlock >
+        <apex:pageBlockSection title="Notes">
+            <apex:pageBlockTable value="{!notes}" var="note">
+                <apex:column value="{!note.Title__c}"/>
+                <apex:column value="{!note.Keywords__c}"/>
+                <apex:column value="{!note.Effective_Date__c}"/>
+                <apex:column value="{!note.Active__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+    </apex:pageBlock >
+</apex:page>

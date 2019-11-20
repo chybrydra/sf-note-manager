@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+  <types>
+    <name>CustomApplication</name>
+    <members>Workspace_20</members>
+  </types>
+  <types>
+    <name>ContentAsset</name>
+    <members>importantnoteicon11</members>
+  </types>
+  <types>
+    <name>FlexiPage</name>
+    <members>Workspace_2_0_UtilityBar</members>
+  </types>
+  <types>
+    <name>ApexPage</name>
+    <members>NotesGenerator</members>
+  </types>
+  <types>
+    <name>CustomTab</name>
+    <members>Note_Generator</members>
+  </types>
+  <version>47.0</version>
+</Package>
