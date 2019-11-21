@@ -8,16 +8,35 @@ public class NotesManagementController {
     public Date startDate {get; set;}
     public Date endDate {get; set;}
     public boolean searchInActive {get; set;}
+    
+    public Integer pageSize {get; set;}
+    public Integer currentPage {get; set;}
+    public Integer offset {get; set;}
 
     public NotesManagementController() {
+        this.pageSize = 5;
+        this.currentPage = 1;
+        this.searchInActive = false;
+        this.searchText = '';
+        this.searchByTitle = false;
+        this.searchByKeyword = false;
+        this.startDate = null;
+        this.endDate = null;
+        calculateOffset();
         initialize();
+    }
+
+    private void calculateOffset() {
+        this.offset = (this.currentPage-1)*this.pageSize;
     }
 
     public void initialize() {
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
-            'ORDER BY ' + sortOrder + ' ASC '
+            'ORDER BY ' + this.sortOrder + ' ASC ' +
+            'LIMIT ' + this.pageSize +
+            'OFFSET ' + this.offset
         );
     }
 
@@ -28,9 +47,31 @@ public class NotesManagementController {
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
             whereStmt + 
-            'ORDER BY ' + sortOrder + ' ASC '
+            'ORDER BY ' + this.sortOrder + ' ASC ' +
+            'LIMIT ' + this.pageSize +
+            'OFFSET ' + this.offset
         );
         ApexPages.getMessages().clear();
+    }
+
+    public void firstPage() {
+        this.currentPage = 1;
+        calculateOffset();
+        search();
+    }
+
+    public void nextPage() {
+        this.currentPage += 1;
+        calculateOffset();
+        search();
+    }
+
+    public void prevPage() {
+        if (this.currentPage > 1) {
+            this.currentPage -= 1;
+            calculateOffset();
+            search();
+        }
     }
 
     private String generateSoqlFilters() {
