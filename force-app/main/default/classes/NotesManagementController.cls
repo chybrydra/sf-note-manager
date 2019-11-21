@@ -13,6 +13,7 @@ public class NotesManagementController {
     public Integer currentPage {get; set;}
     public Integer offset {get; set;}
     public Integer countRecords {get; set;}
+    public Integer lastPage {get; set;}
 
     public NotesManagementController() {
         this.pageSize = 5;
@@ -24,6 +25,7 @@ public class NotesManagementController {
         this.startDate = null;
         this.endDate = null;
         this.countRecords = 0;
+        this.lastPage = 0;
         calculateOffset();
         initialize();
     }
@@ -32,10 +34,14 @@ public class NotesManagementController {
         this.offset = (this.currentPage-1)*this.pageSize;
     }
 
+    private void calculateLastPage() {
+        this.lastPage = this.countRecords/this.pageSize + 1;
+    }
+
     public void initialize() {
         Integer count = Database.countQuery('SELECT COUNT() FROM My_Notes__c');
         this.countRecords = count;
-
+        calculateLastPage();
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
@@ -48,11 +54,11 @@ public class NotesManagementController {
     public void search() {
         String filters = generateSoqlFilters();
         String whereStmt = filters == '' ? '' : 'WHERE ' + filters + ' '; 
-        // Integer count = Database.countQuery(
-        //     'SELECT COUNT() FROM My_Notes__c'
-        //     + whereStmt
-        // );
-        // this.countRecords = count;
+        Integer count = Database.countQuery(
+            'SELECT COUNT() FROM My_Notes__c ' + whereStmt
+        );
+        this.countRecords = count;
+        calculateLastPage();
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
@@ -85,7 +91,7 @@ public class NotesManagementController {
     }
 
     public void lastPage() {
-        this.currentPage += this.countRecords/this.pageSize;
+        this.currentPage = this.lastPage;
         calculateOffset();
         search();
     }

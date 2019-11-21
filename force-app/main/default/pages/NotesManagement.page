@@ -62,7 +62,9 @@
                     <apex:commandLink action="{! prevPage }" value="Prev page"/> &nbsp;
                     <apex:outputText value="{! 'Current page: ' & TEXT(currentPage) }"/> &nbsp;
                     <apex:commandLink action="{! nextPage }" value="Next page"/> &nbsp;
-                    <apex:commandLink action="{! lastPage }" value="Last page"/> &nbsp;
+                    <apex:commandLink 
+                        action="{! lastPage }" 
+                        value="{! 'Last page [' & TEXT(lastPage) & ']' }"/> &nbsp;
                     <apex:outputText value="{! 'Notes found: ' & TEXT(countRecords) }"/> &nbsp;
                 </apex:form>
             </div>
