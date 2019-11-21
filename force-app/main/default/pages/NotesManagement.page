@@ -36,7 +36,7 @@
         </apex:pageBlockSection>
 
         <apex:pageBlockSection title="Notes">            
-            <apex:pageBlockTable value="{! notes }" var="note" id="theTable">
+            <apex:pageBlockTable value="{! notes }" var="note" id="my-notes-table">
                 <apex:column headerValue = "Title">
                     <apex:outputLink value="{! '/' & note.id }">{!note.Title__c}</apex:outputLink>
                 </apex:column>
@@ -56,7 +56,7 @@
                 </apex:column>
             </apex:pageBlockTable>
 
-            <div>
+            <div id="list-pagination">
                 <apex:form>
                     <apex:commandLink action="{! firstPage }" value="First page"/> &nbsp;
                     <apex:commandLink action="{! prevPage }" value="Prev page"/> &nbsp;

@@ -41,6 +41,7 @@ public class NotesManagementController {
     }
 
     public void search() {
+        firstPage();
         String filters = generateSoqlFilters();
         String whereStmt = filters == '' ? '' : 'WHERE ' + filters + ' '; 
         this.notes = Database.query(
@@ -60,12 +61,6 @@ public class NotesManagementController {
         search();
     }
 
-    public void nextPage() {
-        this.currentPage += 1;
-        calculateOffset();
-        search();
-    }
-
     public void prevPage() {
         if (this.currentPage > 1) {
             this.currentPage -= 1;
@@ -73,6 +68,12 @@ public class NotesManagementController {
             search();
         }
     }
+
+    public void nextPage() {
+        this.currentPage += 1;
+        calculateOffset();
+        search();
+    }    
 
     private String generateSoqlFilters() {
         Map<String, Boolean> likeFilters = new Map<String, Boolean>();
