@@ -15,6 +15,8 @@ public class NotesManagementController {
     public Integer countRecords {get; set;}
     public Integer lastPage {get; set;}
 
+    private String whereStmt {get; set;}
+
     public NotesManagementController() {
         this.pageSize = 5;
         this.currentPage = 1;
@@ -26,6 +28,7 @@ public class NotesManagementController {
         this.endDate = null;
         this.countRecords = 0;
         this.lastPage = 0;
+        this.whereStmt = '';
         calculateOffset();
         initialize();
     }
@@ -38,27 +41,34 @@ public class NotesManagementController {
         this.lastPage = this.countRecords/this.pageSize + 1;
     }
 
-    public void initialize() {
-        Integer count = Database.countQuery('SELECT COUNT() FROM My_Notes__c');
-        this.countRecords = count;
+    private void initialize() {
+        countRecords(whereStmt);
         calculateLastPage();
-        this.notes = Database.query(
-            'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
-            'FROM My_Notes__c ' +
-            'ORDER BY ' + this.sortOrder + ' ASC ' +
-            'LIMIT ' + this.pageSize +
-            'OFFSET ' + this.offset
-        );
+        queryRecords('');
+    }
+
+    private void generateWhereStmt() {
+        String filters = generateSoqlFilters();
+        this.whereStmt = filters == '' ? '' : 'WHERE ' + filters + ' '; 
     }
 
     public void search() {
-        String filters = generateSoqlFilters();
-        String whereStmt = filters == '' ? '' : 'WHERE ' + filters + ' '; 
+        firstPage();
+        generateWhereStmt();
+        countRecords(this.whereStmt);
+        calculateLastPage();
+        queryRecords(this.whereStmt);        
+        ApexPages.getMessages().clear();
+    }
+
+    private void countRecords(String whereStmt) {
         Integer count = Database.countQuery(
             'SELECT COUNT() FROM My_Notes__c ' + whereStmt
         );
         this.countRecords = count;
-        calculateLastPage();
+    }
+
+    private void queryRecords(String whereStmt) {
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
@@ -67,33 +77,34 @@ public class NotesManagementController {
             'LIMIT ' + this.pageSize +
             'OFFSET ' + this.offset
         );
-        ApexPages.getMessages().clear();
     }
 
     public void firstPage() {
         this.currentPage = 1;
         calculateOffset();
-        search();
+        queryRecords(this.whereStmt);
     }
 
     public void prevPage() {
         if (this.currentPage > 1) {
             this.currentPage -= 1;
             calculateOffset();
-            search();
+            queryRecords(this.whereStmt);
         }
     }
 
     public void nextPage() {
-        this.currentPage += 1;
-        calculateOffset();
-        search();
+        if (currentPage<lastPage) {
+            this.currentPage += 1;
+            calculateOffset();
+            queryRecords(this.whereStmt);
+        }
     }
 
     public void lastPage() {
         this.currentPage = this.lastPage;
         calculateOffset();
-        search();
+        queryRecords(this.whereStmt);
     }
 
     private String generateSoqlFilters() {
@@ -128,7 +139,7 @@ public class NotesManagementController {
         return result;
     }
 
-    public String createDateString(Date theDate) {
+    private String createDateString(Date theDate) {
         String dateString = theDate.year() + '-';
         dateString += theDate.month() < 10 ? '0' : '';
         dateString += String.valueOf(theDate.month());
