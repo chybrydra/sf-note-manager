@@ -7,6 +7,7 @@ public class NotesManagementController {
     public boolean searchByKeyword {get; set;}
     public Date startDate {get; set;}
     public Date endDate {get; set;}
+    public boolean searchInActive {get; set;}
 
     public NotesManagementController() {
         initialize();
@@ -55,7 +56,11 @@ public class NotesManagementController {
             result += result=='' ? '' : ' AND ';
             result += 'Effective_Date__c < ' + createDateString(endDate) +'T00:00:00Z';
         }
-        System.debug('RESULT OF QUERY CREATION: ' + result);
+        if (searchInActive) {
+            result += result=='' ? '' : ' AND ';
+            result += 'Active__c = TRUE';
+        }
+        
         return result;
     }
 

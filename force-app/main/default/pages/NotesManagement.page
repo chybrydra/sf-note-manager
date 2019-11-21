@@ -7,6 +7,7 @@
                 <div>
                     <apex:inputCheckbox value="{! searchByTitle }"/> search in titles<br/>
                     <apex:inputCheckbox value="{! searchByKeyword }"/> search in keywords<br/>
+                    <apex:inputCheckbox value="{! searchInActive }"/> search in "active" only<br/>
                 </div>
                 <div>
                     Start date: <apex:input type="date" value="{! startDate }" /> <br/>
