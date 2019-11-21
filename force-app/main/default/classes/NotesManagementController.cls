@@ -12,6 +12,7 @@ public class NotesManagementController {
     public Integer pageSize {get; set;}
     public Integer currentPage {get; set;}
     public Integer offset {get; set;}
+    public Integer countRecords {get; set;}
 
     public NotesManagementController() {
         this.pageSize = 5;
@@ -22,6 +23,7 @@ public class NotesManagementController {
         this.searchByKeyword = false;
         this.startDate = null;
         this.endDate = null;
+        this.countRecords = 0;
         calculateOffset();
         initialize();
     }
@@ -31,6 +33,9 @@ public class NotesManagementController {
     }
 
     public void initialize() {
+        Integer count = Database.countQuery('SELECT COUNT() FROM My_Notes__c');
+        this.countRecords = count;
+
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
@@ -41,9 +46,13 @@ public class NotesManagementController {
     }
 
     public void search() {
-        firstPage();
         String filters = generateSoqlFilters();
         String whereStmt = filters == '' ? '' : 'WHERE ' + filters + ' '; 
+        // Integer count = Database.countQuery(
+        //     'SELECT COUNT() FROM My_Notes__c'
+        //     + whereStmt
+        // );
+        // this.countRecords = count;
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
@@ -73,7 +82,13 @@ public class NotesManagementController {
         this.currentPage += 1;
         calculateOffset();
         search();
-    }    
+    }
+
+    public void lastPage() {
+        this.currentPage += this.countRecords/this.pageSize;
+        calculateOffset();
+        search();
+    }
 
     private String generateSoqlFilters() {
         Map<String, Boolean> likeFilters = new Map<String, Boolean>();
