@@ -33,14 +33,6 @@ public class NotesManagementController {
         initialize();
     }
 
-    private void calculateOffset() {
-        this.offset = (this.currentPage-1)*this.pageSize;
-    }
-
-    private void calculateLastPage() {
-        this.lastPage = this.countRecords/this.pageSize + 1;
-    }
-
     private void initialize() {
         countRecords(whereStmt);
         calculateLastPage();
@@ -59,25 +51,23 @@ public class NotesManagementController {
         calculateLastPage();
         queryRecords(this.whereStmt);        
         ApexPages.getMessages().clear();
-    }
+    }    
 
-    private void countRecords(String whereStmt) {
-        Integer count = Database.countQuery(
-            'SELECT COUNT() FROM My_Notes__c ' + whereStmt
-        );
-        this.countRecords = count;
-    }
-
-    private void queryRecords(String whereStmt) {
-        this.notes = Database.query(
-            'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
-            'FROM My_Notes__c ' +
-            whereStmt + 
-            'ORDER BY ' + this.sortOrder + ' ASC ' +
-            'LIMIT ' + this.pageSize +
-            'OFFSET ' + this.offset
-        );
-    }
+    public void deleteNote() {
+        Id noteId = ApexPages.currentpage().getParameters().get('NoteId');
+        My_Notes__c noteToDelete;
+        Integer noteIndex = getNoteIndexByNoteId(noteId, this.notes);
+        try {
+            noteToDelete = notes.get(noteIndex);
+            String message = 'Note deleted successfully: ' + noteToDelete.Title__c;    
+            delete(noteToDelete);            
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,message));
+            notes.remove(noteIndex);
+        } catch (DmlException e) {
+            System.debug(e.getMessage());
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'The note could not be deleted'));            
+        }
+    }    
 
     public void firstPage() {
         this.currentPage = 1;
@@ -105,6 +95,24 @@ public class NotesManagementController {
         this.currentPage = this.lastPage;
         calculateOffset();
         queryRecords(this.whereStmt);
+    }
+
+    private void countRecords(String whereStmt) {
+        Integer count = Database.countQuery(
+            'SELECT COUNT() FROM My_Notes__c ' + whereStmt
+        );
+        this.countRecords = count;
+    }
+
+    private void queryRecords(String whereStmt) {
+        this.notes = Database.query(
+            'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
+            'FROM My_Notes__c ' +
+            whereStmt + 
+            'ORDER BY ' + this.sortOrder + ' ASC ' +
+            'LIMIT ' + this.pageSize +
+            'OFFSET ' + this.offset
+        );
     }
 
     private String generateSoqlFilters() {
@@ -149,23 +157,21 @@ public class NotesManagementController {
         return dateString;
     }
 
-    public void deleteNote() {
-        Id noteId = ApexPages.currentpage().getParameters().get('NoteId');
-        My_Notes__c noteToDelete = [SELECT Id FROM My_Notes__c WHERE Id=:noteId LIMIT 1];
-        try {
-            delete noteToDelete;
-            for (My_Notes__c note : notes) {
-                if (note.Id == noteId) {
-                    Integer noteIndex = notes.indexOf(note);
-                    String message = 'Note deleted successfully: ' + notes.get(noteIndex).Title__c;
-                    ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,message));
-                    notes.remove(noteIndex);
-                    break;
-                }
+    private void calculateOffset() {
+        this.offset = (this.currentPage-1)*this.pageSize;
+    }
+
+    private void calculateLastPage() {
+        this.lastPage = this.countRecords/this.pageSize + 1;
+    }
+
+    private Integer getNoteIndexByNoteId(Id noteId, List<My_Notes__c> notes) {
+        Integer result;
+        for (My_Notes__c note : notes) {
+            if (note.Id == noteId) {
+                result = notes.indexOf(note);
             }
-        } catch (DmlException e) {
-            System.debug(e.getMessage());
-            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'The note could not be deleted'));            
         }
+        return result;
     }
 }
