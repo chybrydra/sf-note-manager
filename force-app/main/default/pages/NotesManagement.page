@@ -1,22 +1,36 @@
 <apex:page docType="html-5.0" controller="NotesManagementController">
     
+    <style>
+        .search-area {
+            display: flex; 
+            flex-wrap: wrap;
+        }
+        .search-col {
+            flex: 1;
+            margin-bottom: 1em;
+            /* white-space: nowrap; */
+        }
+    </style>
+
     <apex:pageBlock>
         <apex:pageMessages/>
         <apex:pageBlockSection title="Search notes">
-            <apex:form style="display: flex">
-                <div>
-                    <apex:inputCheckbox value="{! searchByTitle }"/> search in titles<br/>
-                    <apex:inputCheckbox value="{! searchByKeyword }"/> search in keywords<br/>
-                    <apex:inputCheckbox value="{! searchInActive }"/> search in "active" only<br/>
-                </div>
-                <div>
-                    Start date: <apex:input type="date" value="{! startDate }" /> <br/>
-                    End date: <apex:input type="date" value="{! endDate }" /> <br/>
-                </div>
-                <div>
-                    Search query: <apex:inputText value="{! searchText }"/><br/>
-                    <apex:commandButton action="{! search }" value="search"/>
-                </div>                
+            <apex:form>
+                <div class="search-area">
+                    <div class="search-col">
+                        <apex:inputCheckbox value="{! searchByTitle }"/> search in titles<br/>
+                        <apex:inputCheckbox value="{! searchByKeyword }"/> search in keywords<br/>
+                        <apex:inputCheckbox value="{! searchInActive }"/> search in "active" only<br/>
+                    </div>
+                    <div class="search-col">
+                        Start date: <apex:input type="date" value="{! startDate }" /> <br/>
+                        End date: <apex:input type="date" value="{! endDate }" /> <br/>
+                    </div>
+                    <div class="search-col">
+                        Search query: <apex:inputText value="{! searchText }"/><br/>
+                        <apex:commandButton action="{! search }" value="search"/>
+                    </div>
+                </div>           
             </apex:form>
         </apex:pageBlockSection>
 
