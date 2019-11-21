@@ -48,6 +48,9 @@ public class NotesManagementController {
                 result += ' OR ' + key + ' LIKE \'%' + searchText + '%\'';
             }
         }
+        if (result.contains('OR')) {
+            result = '(' + result + ')';
+        }
         if (startDate != null) {
             result += result=='' ? '' : ' AND ';
             result += 'Effective_Date__c > ' + createDateString(startDate) +'T00:00:00Z';
