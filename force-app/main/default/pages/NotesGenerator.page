@@ -1,13 +1,13 @@
-<apex:page standardController="My_Notes__c" extensions="SaveNoteExt">
+<apex:page controller="MyNotesController">
     <apex:pageMessages/>
     <apex:form id="theForm">        
         <apex:pageBlock title="Create new note">
             <apex:pageBlockSection>  
-                <apex:inputField value="{! My_Notes__c.Title__c }" required="true"/> 
-                <apex:inputField value="{! My_Notes__c.Description__c }" required="true"/>    
-                <apex:inputField value="{! My_Notes__c.Keywords__c }" required="true"/>
-                <apex:inputField value="{! My_Notes__c.Effective_date__c }"/>      
-                <apex:inputField value="{! My_Notes__c.Active__c }"/>
+                <apex:inputField value="{! newNote.Title__c }" required="true"/> 
+                <apex:inputField value="{! newNote.Description__c }" required="true"/>    
+                <apex:inputField value="{! newNote.Keywords__c }" required="true"/>
+                <apex:inputField value="{! newNote.Effective_date__c }"/>      
+                <apex:inputField value="{! newNote.Active__c }"/>
             </apex:pageBlockSection>
             <apex:pageBlockButtons>
                 <apex:commandButton action="{! saveNote }" value="Save"/>        
