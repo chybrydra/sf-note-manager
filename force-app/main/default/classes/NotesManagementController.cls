@@ -17,8 +17,7 @@ public class NotesManagementController {
         this.notes = Database.query(
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
-            'ORDER BY ' + sortOrder + ' ASC ' +
-            'LIMIT 20'
+            'ORDER BY ' + sortOrder + ' ASC '
         );
     }
 
@@ -29,8 +28,7 @@ public class NotesManagementController {
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
             whereStmt + 
-            'ORDER BY ' + sortOrder + ' ASC ' +
-            'LIMIT 20'
+            'ORDER BY ' + sortOrder + ' ASC '
         );
         ApexPages.getMessages().clear();
     }
