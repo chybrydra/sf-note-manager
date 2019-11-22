@@ -1,4 +1,4 @@
-public class MyNotesController {
+public with sharing class MyNotesController {
 
     public My_Notes__c newNote {get; set;}
 

@@ -1,4 +1,4 @@
-public class NotesManagementController {
+public with sharing class NotesManagementController {
 
     private String sortOrder = 'Effective_Date__c';
     public List<My_Notes__c> notes {get; set;}
