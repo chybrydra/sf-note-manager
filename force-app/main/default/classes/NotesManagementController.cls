@@ -62,7 +62,8 @@ public with sharing class NotesManagementController {
             String message = 'Note deleted successfully: ' + noteToDelete.Title__c;    
             delete(noteToDelete);            
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.CONFIRM,message));
-            notes.remove(noteIndex);
+            queryRecords(whereStmt);
+            search();
         } catch (DmlException e) {
             System.debug(e.getMessage());
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,'The note could not be deleted'));            
