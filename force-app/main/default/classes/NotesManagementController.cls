@@ -110,7 +110,7 @@ public with sharing class NotesManagementController {
             'SELECT Id, Title__c, Keywords__c, Effective_Date__c, Active__c ' +
             'FROM My_Notes__c ' +
             whereStmt + 
-            'ORDER BY ' + this.sortOrder + ' ASC ' +
+            'ORDER BY ' + this.sortOrder + ' DESC ' +
             'LIMIT ' + this.pageSize +
             'OFFSET ' + this.offset
         );
